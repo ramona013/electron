@@ -736,8 +736,7 @@ describe('BrowserWindow module', () => {
         expect(w.isFocused()).to.equal(false);
       });
 
-      // TODO(dsanders11): Enable for Linux once CI plays nice with these kinds of tests
-      ifit(process.platform !== 'linux')('should not restore maximized windows', async () => {
+      it('should not restore maximized windows', async () => {
         const maximize = emittedOnce(w, 'maximize');
         const shown = emittedOnce(w, 'show');
         w.maximize();
@@ -1239,7 +1238,7 @@ describe('BrowserWindow module', () => {
         });
       });
 
-      ifdescribe(process.platform !== 'linux')('Maximized state', () => {
+      describe('Maximized state', () => {
         it('checks normal bounds when maximized', async () => {
           const bounds = w.getBounds();
           const maximize = emittedOnce(w, 'maximize');
@@ -1293,7 +1292,8 @@ describe('BrowserWindow module', () => {
           await close;
         });
 
-        it('checks normal bounds when unmaximized', async () => {
+        // TODO(dsanders11): Enable for Linux once CI plays nice with these kinds of tests
+        ifit(process.platform !== 'linux')('checks normal bounds when unmaximized', async () => {
           const bounds = w.getBounds();
           w.once('maximize', () => {
             w.unmaximize();
@@ -1364,10 +1364,25 @@ describe('BrowserWindow module', () => {
           w.resizable = false;
           expect(w.isMaximized()).to.equal(true);
         });
+
+        it('goes back to maximized state after minimized and restore', async () => {
+          const maximize = emittedOnce(w, 'maximize');
+          w.maximize();
+          await maximize;
+          const minimize = emittedOnce(w, 'minimize');
+          w.minimize();
+          await minimize;
+          expect(w.isMaximized()).to.equal(false);
+          const restore = emittedOnce(w, 'restore');
+          w.restore();
+          await restore;
+          expect(w.isMaximized()).to.equal(true);
+        });
       });
 
-      ifdescribe(process.platform !== 'linux')('Minimized state', () => {
-        it('checks normal bounds when minimized', async () => {
+      describe('Minimized state', () => {
+        // TODO(dsanders11): Enable for Linux once CI plays nice with these kinds of tests
+        ifit(process.platform !== 'linux')('checks normal bounds when minimized', async () => {
           const bounds = w.getBounds();
           const minimize = emittedOnce(w, 'minimize');
           w.show();
@@ -1376,7 +1391,8 @@ describe('BrowserWindow module', () => {
           expectBoundsEqual(w.getNormalBounds(), bounds);
         });
 
-        it('updates normal bounds after move and minimize', async () => {
+        // TODO(dsanders11): Enable for Linux once CI plays nice with these kinds of tests
+        ifit(process.platform !== 'linux')('updates normal bounds after move and minimize', async () => {
           const pos = [10, 10];
           const move = emittedOnce(w, 'move');
           w.setPosition(pos[0], pos[1]);
@@ -1393,7 +1409,8 @@ describe('BrowserWindow module', () => {
           expectBoundsEqual(normal, w.getBounds());
         });
 
-        it('updates normal bounds after resize and minimize', async () => {
+        // TODO(dsanders11): Enable for Linux once CI plays nice with these kinds of tests
+        ifit(process.platform !== 'linux')('updates normal bounds after resize and minimize', async () => {
           const size = [300, 400];
           const resize = emittedOnce(w, 'resize');
           w.setSize(size[0], size[1]);
@@ -1410,7 +1427,8 @@ describe('BrowserWindow module', () => {
           expectBoundsEqual(normal, w.getBounds());
         });
 
-        it('checks normal bounds when restored', async () => {
+        // TODO(dsanders11): Enable for Linux once CI plays nice with these kinds of tests
+        ifit(process.platform !== 'linux')('checks normal bounds when restored', async () => {
           const bounds = w.getBounds();
           w.once('minimize', () => {
             w.restore();
