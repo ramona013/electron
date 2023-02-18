@@ -417,11 +417,7 @@ WebContents.prototype.loadFile = function (filePath, options = {}) {
   }));
 };
 
-WebContents.prototype.loadURL = function (url, options) {
-  if (!options) {
-    options = {};
-  }
-
+WebContents.prototype.loadURL = function (url, options = {}) {
   const p = new Promise<void>((resolve, reject) => {
     const resolveAndCleanup = () => {
       removeListeners();
